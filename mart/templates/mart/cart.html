@@ -1,0 +1,92 @@
+{% extends "mart/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <section class="section-pagetop bg">
+        <h2 class="title-page">Shopping cart</h2>
+    </section>
+
+    <section class="section-content padding-z">
+        <div class="row">
+            <main class="col-md-9">
+        <div class="card">
+
+        <table class="table table-borderless table-shopping-cart">
+        <thead class="text-muted">
+        <tr class="small text-uppercase">
+          <th scope="col">Product</th>
+          <th scope="col" width="120">Quantity</th>
+          <th scope="col" width="120">Price</th>
+          <th scope="col" class="text-right" width="200"> </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for item in items %}
+        <tr>
+            <td>
+                <figure class="itemside">
+                    <a href="{% url 'product' item.product.id %}" class="aside"><img src="{{ item.product.image.url }}" alt="sample" class="img-sm"></a>
+                    <div class="info">
+                        <div class="title text-dark">{{ item.product.name }}</div>
+                    </div>
+                </figure>
+            </td>
+            <td>
+                <input id="new-value-{{ item.product.id }}" onchange="update_value({{ item.product.id }})" class="form-control" value="{{ item.quantity }}">
+            </td>
+            <td>
+                <div class="price-wrap">
+                    <var class="price">${{ item.get_total }}</var><br>
+                    <small class="text-muted"> ${{ item.product.price }} per {{ item.product.uom }} </small>
+                </div>
+            </td>
+            <td class="text-right">
+            <button class="btn btn-danger" onclick="update_cart({{ item.product.id }})"> Remove</button>
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+        </table>
+
+        <div class="card-body border-top">
+            <a href="{% url 'checkout' %}" class="btn btn-success float-md-right"> Checkout <i class="fa fa-chevron-right"></i> </a>
+            <a href="{% url 'index' %}" class="btn btn-primary"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
+        </div>
+        </div>
+
+            </main>
+            <aside class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                            <dl class="dlist-align">
+                              <dt>Total price:</dt>
+                              <dd class="text-right">${{ order.cart_total }}</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                              <dt>Discount:</dt>
+                              <dd class="text-right">$0</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                              <dt>Total:</dt>
+                              <dd class="text-right  h5"><strong>${{ order.cart_total }}</strong></dd>
+                            </dl>
+                            <hr>
+                            <p class="text-center mb-3">
+                                <img src="{% static 'mart/pay.png' %}" alt="payments" style="width:80%">
+                            </p>
+
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+<script src="{% static 'mart/cart.js' %}"></script>
+{% endblock %}

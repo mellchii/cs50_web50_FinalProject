@@ -1,0 +1,90 @@
+{% extends "mart/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <section class="section-pagetop bg">
+        <h2 class="title-page">Wishlist</h2>
+    </section>
+
+    <main class="category-container">
+        {% for list in lists %}
+        <article class="card card-product-list">
+            <div class="row no-gutters">
+                <aside class="col-md-3 img-wrap">
+                    <a href="{% url 'product' list.product.id %}">
+                        <img src="{{ list.product.image.url }}">
+                    </a>
+                </aside>
+                <div class="col-md-6">
+                    <div class="info-main">
+                        <a href="#" class="h5 title">{{ list.product.name }}</a>
+                        {% if list.product.avg_rating == 1 %}
+                        <div class="rating-wrap mb-3">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                        {% elif list.product.avg_rating == 2 %}
+                        <div class="rating-wrap mb-3">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                        {% elif list.product.avg_rating == 3 %}
+                        <div class="rating-wrap mb-3">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                        {% elif list.product.avg_rating == 4 %}
+                        <div class="rating-wrap mb-3">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                        {% elif list.product.avg_rating == 5 %}
+                        <div class="rating-wrap mb-3">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                        </div>
+                        {% endif %}
+
+                        <p><em> {{ list.product.long_description }} </em></p>
+                    </div>
+                </div>
+                <aside class="col-sm-3">
+                    <div class="info-aside">
+                        <div class="price-wrap">
+                            <span class="price h5"> ${{ list.product.price }}</span>
+                        </div>
+                        <p class="text-success"><small class="text-muted"> per {{ list.product.uom }} </small></p>
+                        <p>
+                            <a href="{% url 'product' list.product.id %}" class="btn btn-primary btn-block"> Details </a>
+                            <button name="{{ list.product.id }}" id="remove-wishlist" class="btn btn-danger btn-block"><i class="fa fa-heart"></i>
+                                Remove from wishlist
+                            </button>
+                        </p>
+                    </div>
+                </aside>
+            </div>
+        </article>
+        {% endfor %}
+	</main>
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+<script src="{% static 'mart/wish.js' %}"></script>
+{% endblock %}

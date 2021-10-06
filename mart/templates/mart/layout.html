@@ -1,0 +1,136 @@
+{% load static %}
+
+<!DOCTYPE html>
+    <head>
+        <title>{% block title %}Lenaby Mart{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'mart/styles.css' %}" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/2d6bdc3669.js" crossorigin="anonymous"></script>
+        {% block script %}
+        {% endblock %}
+    </head>
+    <body>
+        <div id="page-container">
+            <div id="content-wrap">
+                {% if messages %}
+                <div class="alert alert-success" role="alert" style="text-align:center">
+                    {% for message in messages %}
+                    <h4 {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</h4>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <nav class="main-header navbar-expand navbar-white navbar-light" style="border-bottom:1px solid #e4e4e4 !important; padding: 15px 0;">
+                    <div class="row align-items-center">
+                        <div class="col-lg-2 col-6">
+                            <a href="{% url 'index' %}">
+                                <img src="{% static 'mart/LogoCopy.png' %}" alt="Logo" style="width:100%; border-radius:5px; border:5px solid #99ddff;">
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12">
+                            <form method="get" action="{% url 'results' %}" class="search">
+                                <div class="input-group w-100">
+                                    <input name="q" value="{{ request.GET.q }}" type="text" class="form-control" placeholder="Search">
+                                    <div class="input-group-append">
+                                      <button class="btn btn-primary" type="submit" style="background-color:#99ddff;">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-lg-4 col-sm-6 col-12">
+                            <div class="float-lg-right">
+                                <ul class="navbar-nav ml-auto">
+                                    {% if user.is_authenticated %}
+                                    <li style="padding-right:5px; padding-top:3px">
+                                        {% if user.is_staff %}
+                                        <a href="{% url 'stock' %}"><i class="fas fa-briefcase fa-lg" style="padding: 0 5px;" ></i></a>
+                                        {% endif %}
+                                        <a href="{% url 'wishlist' %}"><i class="fa fa-heart fa-lg" style="padding: 0 5px;" ></i></a>
+                                        <div style="display: inline-block; vertical-align: middle; position: relative;">
+                                            <a href="{% url 'cart' %}"><span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"  style="color:#cceeff"></i>
+                                            <i class="fa fa-shopping-cart fa-stack-1x"></i>
+                                        </span><span id="cart-count" class="badge badge-pill badge-danger" style="position:absolute; top:-3px; right:-5px">{{ order.item_total }}</span></a>
+                                        </div>
+                                    </li>
+                                    {% endif %}
+                                    <li>
+                                        <div style="margin-left: 10px;">
+                                            <span class="text-muted">Welcome {{ user.username }}!</span>
+                                            {% if user.is_authenticated %}
+                                            <div>
+                                                <a href="{% url 'logout' %}">Log Out</a>
+                                            </div>
+                                            {% else %}
+                                            <div>
+                                                <a href="{% url 'login' %}">Sign In</a> |
+                                                <a href="{% url 'register' %}"> Register</a>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <nav class="navbar navbar-main navbar-expand-lg navbar-light border-bottom">
+                  <div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav" aria-controls="main_nav" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="main_nav">
+                      <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <strong><a class="nav-link" href="{% url 'category' 'FR' %}">Fruits</a></strong>
+                        </li>
+                        <li class="nav-item">
+                            <strong><a class="nav-link" href="{% url 'category' 'VG' %}">Vegetables</a></strong>
+                        </li>
+                        <li class="nav-item">
+                            <strong><a class="nav-link" href="{% url 'category' 'MT' %}">Meat</a></strong>
+                        </li>
+                        <li class="nav-item">
+                            <strong><a class="nav-link" href="{% url 'category' 'TU' %}">Tubers</a></strong>
+                        </li>
+                        <li class="nav-item">
+                            <strong><a class="nav-link" href="{% url 'category' 'GR' %}">Grains</a></strong>
+                        </li>
+                        <li class="nav-item">
+                            <strong><a class="nav-link" href="{% url 'category' 'DY' %}">Dairy</a></strong>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </nav>
+
+                <div class="body">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <section id="footer" class="footer-bottom border-top row">
+                <div class="col-md-2">
+                    <p class="text-muted"> © 2021 Lenaby </p>
+                </div>
+                <div class="col-md-8 text-md-center">
+                    <span class="px-2">info@lenaby.com</span>
+                    <span class="px-2">+234-123-4567-8901</span>
+                    <span class="px-2">Street name 123, Royal Avenue</span>
+                </div>
+                <div class="col-md-2 text-md-right text-muted">
+                    <a href="#"><i class="fa fa-instagram"></i></a>
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-whatsapp"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-youtube-play"></i></a>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
